@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "cadres-utils-package"
+version = "0.1.0"
+description = ""
+authors = ["kashim <dmetlushko@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+setuptools = "^74.1.2"
+pandas = "^2.2.2"
+aiohttp = "^3.10.5"
+openpyxl = "^3.1.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
