@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "A staff file calulation algorithm"
 authors = ["kashim <dmetlushko@gmail.com>"]
 readme = "README.md"
+packages = [
+    { include = "cadres_utils"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
