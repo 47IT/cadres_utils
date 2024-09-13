@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "cadres-utils-package"
 version = "0.1.0"
-description = ""
+description = "A staff file calulation algorithm"
 authors = ["kashim <dmetlushko@gmail.com>"]
 readme = "README.md"
 
