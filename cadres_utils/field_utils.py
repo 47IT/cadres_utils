@@ -10,7 +10,7 @@ SERVER_DATE_FORMAT = '%Y-%m-%d'
 def get_field_value(curr_row, field_name, is_float_to_int: bool = False, custom_date_format: str = None):
     if pd.notnull(curr_row[field_name]):
         if isinstance(curr_row[field_name], (datetime, pd.Timestamp)):
-            date_format = '%d.%m.%Y'
+            date_format = VIEW_DATE_FORMAT
             if custom_date_format:
                 date_format = custom_date_format
             return date_to_str(curr_row[field_name], date_format)
