@@ -3,6 +3,9 @@ from datetime import datetime
 import pandas as pd
 from numpy import int64
 
+VIEW_DATE_FORMAT = '%d.%m.%Y'
+SERVER_DATE_FORMAT = '%Y-%m-%d'
+
 
 def get_field_value(curr_row, field_name, is_float_to_int: bool = False, custom_date_format: str = None):
     if pd.notnull(curr_row[field_name]):
