@@ -11,5 +11,4 @@ class ExcelDataSource:
     date_fields_to_convert: List[str] = None
     not_prepare_str_fields: List[str] = None
     skip_rows: int = None
-    all_fields_as_str: bool = False
-
+    error_on_invalid_date: bool = False
