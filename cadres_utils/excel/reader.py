@@ -20,23 +20,23 @@ def proc_date_field(x):
         new_string = x.translate(translation_table)
         lst = new_string.split('.')
         if len(lst) == 3:
-            try:
-                lst = [int(i) for i in lst]
-                if lst[1] > 12 >= lst[0]:
-                    date_str = f'{lst[1]}.{lst[0]}.{lst[2]}'
-                elif lst[0] > 12 >= lst[1]:
-                    date_str = f'{lst[0]}.{lst[1]}.{lst[2]}'
-                elif '.' in x:  # якщо дата була без точок ти не зрозуміло що з них місяць, а що день
-                    date_str = x
-                else:
-                    date_str = ''
+            # try:
+            lst = [int(i) for i in lst]
+            if lst[1] > 12 >= lst[0]:
+                date_str = f'{lst[1]}.{lst[0]}.{lst[2]}'
+            elif lst[0] > 12 >= lst[1]:
+                date_str = f'{lst[0]}.{lst[1]}.{lst[2]}'
+            elif '.' in x:  # якщо дата була без точок ти не зрозуміло що з них місяць, а що день
+                date_str = x
+            else:
+                date_str = ''
 
-                if date_str:
-                    return pd.to_datetime(date_str, format='%d.%m.%Y')
-                else:
-                    return None
-            except ValueError:
+            if date_str:
+                return pd.to_datetime(date_str, format='%d.%m.%Y')
+            else:
                 return None
+            # except ValueError:
+            #     return None
         else:
             return None
     else:
