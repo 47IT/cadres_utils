@@ -44,21 +44,21 @@ def proc_date_field(x):
 
 
 def read_data_from_excel(source: ExcelDataSource) -> DataFrame:
+    dtype_val = None
+    skip_rows_val = None
+    if source.all_fields_as_str:
+        dtype_val = str
     if source.skip_rows:
-        # noinspection PyTypeChecker
-        df = pd.read_excel(
-            source.file_path,
-            sheet_name=source.sheet_name,
-            usecols=source.fields,
-            skiprows=source.skip_rows,
-        )
-    else:
-        # noinspection PyTypeChecker
-        df = pd.read_excel(
-            source.file_path,
-            sheet_name=source.sheet_name,
-            usecols=source.fields,
-        )
+        skip_rows_val = source.skip_rows
+
+    # noinspection PyTypeChecker
+    df = pd.read_excel(
+        source.file_path,
+        sheet_name=source.sheet_name,
+        usecols=source.fields,
+        skiprows=skip_rows_val,
+        dtype=dtype_val
+    )
 
     if source.new_column_names:
         if isinstance(source.fields, list):
