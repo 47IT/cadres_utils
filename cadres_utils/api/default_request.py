@@ -17,8 +17,8 @@ async def process_default_list(
     start_time = time.perf_counter()
     # logging.debug(f'Fetching data {object_name}')
     response = await api.post_request(
-        urljoin(object_name, 'List'),
-        # os.path.join(object_name, 'List'),
+        # urljoin(object_name, 'List'),
+        os.path.join(object_name, 'List'),
         {
             'Page': -1,
             'Columns': columns,
