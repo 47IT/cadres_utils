@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from urllib.parse import urljoin
 
 import pandas as pd
 from pandas import DataFrame
@@ -16,7 +17,8 @@ async def process_default_list(
     start_time = time.perf_counter()
     # logging.debug(f'Fetching data {object_name}')
     response = await api.post_request(
-        os.path.join(object_name, 'List'),
+        urljoin(object_name, 'List'),
+        # os.path.join(object_name, 'List'),
         {
             'Page': -1,
             'Columns': columns,
