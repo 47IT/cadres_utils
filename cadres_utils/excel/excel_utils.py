@@ -41,7 +41,7 @@ def save_default_excel_to_io_stream(df: DataFrame, export_index=False, set_defau
     worksheet = writer.sheets['Sheet1']
 
     if set_default_font or col_alignment:
-        for col in range(1, worksheet.max_column + 1):
+        for col in range(1, len(df.columns) + 1):
             col_letter = get_column_letter(col)
             if set_default_font:
                 worksheet.column_dimensions[col_letter].font = Font(name='Times New Roman', size=12)
