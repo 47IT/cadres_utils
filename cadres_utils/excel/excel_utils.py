@@ -2,8 +2,6 @@ import io
 from datetime import date
 
 import pandas as pd
-from openpyxl.styles import Font, Alignment
-from openpyxl.utils import get_column_letter
 from pandas import DataFrame
 from openpyxl import Workbook
 
@@ -28,7 +26,7 @@ def save_default_excel_file(df: DataFrame, save_path: str, export_index=False, f
     return file_path
 
 
-def save_default_excel_to_io_stream(df: DataFrame, export_index=False, set_default_font=False, col_alignment: str | None=None) -> io.BytesIO:
+def save_default_excel_to_io_stream(df: DataFrame, export_index=False) -> io.BytesIO:
     doc_io = io.BytesIO()
     writer = pd.ExcelWriter(
         doc_io,
@@ -37,16 +35,6 @@ def save_default_excel_to_io_stream(df: DataFrame, export_index=False, set_defau
         date_format="dd.mm.yyyy",
     )
     df.to_excel(writer, index=export_index)
-
-    worksheet = writer.sheets['Sheet1']
-
-    if set_default_font or col_alignment:
-        for col in range(1, len(df.columns) + 1):
-            col_letter = get_column_letter(col)
-            if set_default_font:
-                worksheet.column_dimensions[col_letter].font = Font(name='Times New Roman', size=12)
-            if col_alignment:
-                worksheet.column_dimensions[col_letter].alignment = Alignment(horizontal=col_alignment)
 
     writer.close()
     doc_io.seek(0)
