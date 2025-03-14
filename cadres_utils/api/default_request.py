@@ -70,7 +70,7 @@ def __process_date_error(src_df: DataFrame, field: str, object_name: str):
     logging.error(f'Error in field {field} of {object_name}')
     tmp_df = src_df.copy()
     try:
-        tmp_df[field] = tmp_df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
+        tmp_df[field] = tmp_df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S').date() if pd.notnull(x) else None)
     except ValueError as e:
         logging.error(f'Error in field {field} of {object_name}. Error: {e}')
     filter_date = datetime.strptime('2500-01-01', '%Y-%m-%d').date()
