@@ -75,6 +75,10 @@ def __process_date_error(src_df: DataFrame, field: str, object_name: str):
         logging.error(f'Error in field {field} of {object_name}. Error: {e}')
     filter_date = datetime.strptime('2500-01-01', '%Y-%m-%d').date()
     tmp_df = tmp_df[tmp_df[field] >= filter_date]
+    columns = [field]
+    if 'ID' in tmp_df.columns:
+        columns.append('ID')
+    tmp_df = tmp_df[columns]
     tmp_dic = tmp_df.to_dict(orient='records')
 
     raise ApiException(f'Error in field {field} of {object_name}. {tmp_dic}')
