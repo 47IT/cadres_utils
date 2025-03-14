@@ -51,8 +51,8 @@ async def process_default_list(
             except OutOfBoundsDatetime:
                 logging.error(f'Error in field {field} of {object_name}')
                 tmp_df = df.copy()
-                tmp_df[field] = df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
-                filter_date = datetime.strptime('2025-01-01', '%Y-%m-%d').date()
+                tmp_df[field] = tmp_df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
+                filter_date = datetime.strptime('2500-01-01', '%Y-%m-%d').date()
                 tmp_df = tmp_df[tmp_df[field] >= filter_date]
                 tmp_dic = tmp_df.to_dict(orient='records')
 
