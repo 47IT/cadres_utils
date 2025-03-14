@@ -49,14 +49,7 @@ async def process_default_list(
                 df[field] = df[field].apply(lambda x: pd.to_datetime(x, format='ISO8601') if pd.notnull(x) else None)
                 # df[field] = pd.to_datetime(df[field], format='ISO8601', errors='coerce')
             except OutOfBoundsDatetime:
-                logging.error(f'Error in field {field} of {object_name}')
-                tmp_df = df.copy()
-                tmp_df[field] = tmp_df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
-                filter_date = datetime.strptime('2500-01-01', '%Y-%m-%d').date()
-                tmp_df = tmp_df[tmp_df[field] >= filter_date]
-                tmp_dic = tmp_df.to_dict(orient='records')
-
-                raise ApiException(f'Error in field {field} of {object_name}. {tmp_dic}')
+                __process_date_error(df, field, object_name)
             except Exception as e:
                 logging.error(f'Error in field {field} of {object_name}')
                 raise e
@@ -71,3 +64,17 @@ def __process_default_list_from_cache(file_path: str):
         return pd.read_parquet(file_path)
     else:
         raise ApiException(f'File not found: {file_path}')
+
+
+def __process_date_error(src_df: DataFrame, field: str, object_name: str):
+    logging.error(f'Error in field {field} of {object_name}')
+    tmp_df = src_df.copy()
+    try:
+        tmp_df[field] = tmp_df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
+    except ValueError as e:
+        logging.error(f'Error in field {field} of {object_name}. Error: {e}')
+    filter_date = datetime.strptime('2500-01-01', '%Y-%m-%d').date()
+    tmp_df = tmp_df[tmp_df[field] >= filter_date]
+    tmp_dic = tmp_df.to_dict(orient='records')
+
+    raise ApiException(f'Error in field {field} of {object_name}. {tmp_dic}')
