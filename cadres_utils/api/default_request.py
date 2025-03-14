@@ -6,6 +6,7 @@ from datetime import datetime
 
 import pandas as pd
 from pandas import DataFrame
+from pandas._libs import OutOfBoundsDatetime
 
 from cadres_utils.api.exception import ApiException
 from cadres_utils.api.wapi_invoker import WapiInvoker
@@ -47,7 +48,7 @@ async def process_default_list(
             try:
                 df[field] = df[field].apply(lambda x: pd.to_datetime(x, format='ISO8601') if pd.notnull(x) else None)
                 # df[field] = pd.to_datetime(df[field], format='ISO8601', errors='coerce')
-            except OverflowError as e:
+            except OutOfBoundsDatetime:
                 logging.error(f'Error in field {field} of {object_name}')
                 tmp_df = df.copy()
                 tmp_df[field] = df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
