@@ -47,8 +47,6 @@ async def process_default_list(
         for field in date_fields:
             try:
                 df[field] = pd.to_datetime(df[field], format='ISO8601')
-                # df[field] = df[field].apply(lambda x: pd.to_datetime(x, format='ISO8601') if pd.notnull(x) else None)
-                # df[field] = pd.to_datetime(df[field], format='ISO8601', errors='coerce')
             except OutOfBoundsDatetime:
                 __process_date_error(df, field, object_name)
             except Exception as e:
