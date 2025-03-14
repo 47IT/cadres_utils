@@ -1,7 +1,7 @@
 import logging
 import os
+import posixpath
 import time
-from urllib.parse import urljoin
 
 import pandas as pd
 from pandas import DataFrame
@@ -15,10 +15,9 @@ async def process_default_list(
         new_column_names: list[str] | None = None,
 ) -> DataFrame:
     start_time = time.perf_counter()
-    # logging.debug(f'Fetching data {object_name}')
+    req_url = posixpath.join(object_name, 'List')
     response = await api.post_request(
-        # urljoin(object_name, 'List'),
-        os.path.join(object_name, 'List'),
+        req_url,
         {
             'Page': -1,
             'Columns': columns,
