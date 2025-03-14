@@ -16,7 +16,6 @@ async def process_default_list(
 ) -> DataFrame:
     start_time = time.perf_counter()
     req_url = posixpath.join(object_name, 'List')
-    logging.info(f'requesting {req_url}')
     response = await api.post_request(
         req_url,
         {
