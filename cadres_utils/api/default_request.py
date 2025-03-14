@@ -2,6 +2,7 @@ import logging
 import os
 import posixpath
 import time
+from datetime import datetime
 
 import pandas as pd
 from pandas import DataFrame
@@ -46,6 +47,15 @@ async def process_default_list(
             try:
                 # df[field] = df[field].apply(lambda x: pd.to_datetime(x, format='ISO8601') if pd.notnull(x) else None)
                 df[field] = pd.to_datetime(df[field], format='ISO8601', errors='coerce')
+            except OverflowError as e:
+                logging.error(f'Error in field {field} of {object_name}')
+                tmp_df = df.copy()
+                tmp_df[field] = df[field].apply(lambda x: datetime.strptime(x, '%Y-%m-%d').date() if pd.notnull(x) else None)
+                filter_date = datetime.strptime('2025-01-01', '%Y-%m-%d').date()
+                tmp_df = tmp_df[tmp_df[field] >= filter_date]
+                tmp_dic = tmp_df.to_dict(orient='records')
+
+                raise ApiException(f'Error in field {field} of {object_name}. {tmp_dic}')
             except Exception as e:
                 logging.error(f'Error in field {field} of {object_name}')
                 raise e
