@@ -45,8 +45,8 @@ async def process_default_list(
     if not df.empty and date_fields:
         for field in date_fields:
             try:
-                # df[field] = df[field].apply(lambda x: pd.to_datetime(x, format='ISO8601') if pd.notnull(x) else None)
-                df[field] = pd.to_datetime(df[field], format='ISO8601', errors='coerce')
+                df[field] = df[field].apply(lambda x: pd.to_datetime(x, format='ISO8601') if pd.notnull(x) else None)
+                # df[field] = pd.to_datetime(df[field], format='ISO8601', errors='coerce')
             except OverflowError as e:
                 logging.error(f'Error in field {field} of {object_name}')
                 tmp_df = df.copy()
