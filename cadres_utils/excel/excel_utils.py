@@ -95,3 +95,9 @@ def update_row_formulas(sheet, row_index: int, orig_template_row_shift: int):
             formula = cell.value
             new_formula = formula.replace(str(orig_template_row_shift), str(row_index))
             cell.value = new_formula
+
+
+def write_to_cell(write_sheet, write_row_num: int, write_col_num: int, value: str | int | float | None):
+    if value is not None: # 0 value should be written
+        new_cell = write_sheet.cell(row=write_row_num, column=write_col_num)
+        new_cell.value = value
