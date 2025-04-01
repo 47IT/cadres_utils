@@ -1,7 +1,7 @@
 [project]
-name = "importscripts"
+name = "cadres-utils-package"
 version = "0.1.0"
-description = "Add your description here"
+description = "utility functions for cadres"
 requires-python = ">=3.13"
 dependencies = [
     "aiohttp>=3.11.15",
