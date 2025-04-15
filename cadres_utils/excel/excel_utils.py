@@ -1,4 +1,5 @@
 import io
+import os.path
 from datetime import date
 
 import pandas as pd
@@ -11,10 +12,11 @@ from cadres_utils.file_utils import get_random_string
 def save_default_excel_file(df: DataFrame, save_path: str, export_index=False, file_name: str = None) -> str:
     if file_name is None:
         file_hash = get_random_string(100)
-        file_path = f'{save_path}{file_hash}.xlsx'
+        res_file_name = f'{file_hash}.xlsx'
     else:
-        file_path = f'{save_path}{file_name}.xlsx'
+        res_file_name = f'{file_name}.xlsx'
 
+    file_path = os.path.join(save_path, res_file_name)
     writer = pd.ExcelWriter(
         file_path,
         engine="xlsxwriter",
@@ -54,7 +56,8 @@ def get_default_file_name(base_name: str, start_date: date, end_date: date, file
 
 def save_workbook_to_file(wb: Workbook, save_path: str) -> str:
     file_hash = get_random_string(100)
-    file_path = f'{save_path}{file_hash}.xlsx'
+    res_file_name = f'{file_hash}.xlsx'
+    file_path = os.path.join(save_path, res_file_name)
     wb.save(file_path)
     return file_path
 
