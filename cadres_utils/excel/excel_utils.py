@@ -1,5 +1,6 @@
 import io
 import os.path
+from copy import copy
 from datetime import date
 
 import pandas as pd
@@ -71,20 +72,23 @@ def work_book_2_io_stream(wb: Workbook) -> io.BytesIO:
 
 
 def copy_row_styles_and_formulas(
-        sheet, src_row_index: int, start_row_index: int, end_row_index: int, orig_template_formula_row: int
+        sheet, src_row_index: int, start_row_index: int, end_row_index: int, orig_template_formula_row: int | None = None
 ):
     last_col_index = sheet.max_column
     for row in range(start_row_index, end_row_index + 1):
         for col in range(1, last_col_index + 1):
             new_cell = sheet.cell(row=row, column=col)
-            template_cell = sheet.cell(row=src_row_index, column=col)
+            ref_cell = sheet.cell(row=src_row_index, column=col)
 
-            # Copy style
-            new_cell._style = template_cell._style
+            new_cell.font = copy(ref_cell.font)
+            new_cell.fill = copy(ref_cell.fill)
+            new_cell.border = copy(ref_cell.border)
+            new_cell.alignment = copy(ref_cell.alignment)
+            new_cell.number_format = ref_cell.number_format
 
             # Copy formula, adjusting row references
-            if template_cell.data_type == 'f':
-                formula = template_cell.value
+            if ref_cell.data_type == 'f' and orig_template_formula_row:
+                formula = ref_cell.value
                 # Adjust row references in the formula
                 new_formula = formula.replace(str(orig_template_formula_row), str(row))
                 new_cell.value = new_formula
