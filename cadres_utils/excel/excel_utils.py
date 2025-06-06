@@ -1,9 +1,9 @@
 import io
 import os.path
-from copy import copy
 from datetime import date
 
 import pandas as pd
+from openpyxl.styles import NamedStyle
 from pandas import DataFrame
 from openpyxl import Workbook
 
@@ -75,23 +75,21 @@ def copy_row_styles_and_formulas(
         sheet, src_row_index: int, start_row_index: int, end_row_index: int, orig_template_formula_row: int | None = None
 ):
     last_col_index = sheet.max_column
+    named_styles = __create_named_styles(sheet, src_row_index)
     for row in range(start_row_index, end_row_index + 1):
         for col in range(1, last_col_index + 1):
             new_cell = sheet.cell(row=row, column=col)
-            ref_cell = sheet.cell(row=src_row_index, column=col)
-
-            new_cell.font = copy(ref_cell.font)
-            new_cell.fill = copy(ref_cell.fill)
-            new_cell.border = copy(ref_cell.border)
-            new_cell.alignment = copy(ref_cell.alignment)
-            new_cell.number_format = ref_cell.number_format
+            if col in named_styles:
+                new_cell.style = named_styles[col]
 
             # Copy formula, adjusting row references
-            if ref_cell.data_type == 'f' and orig_template_formula_row:
-                formula = ref_cell.value
-                # Adjust row references in the formula
-                new_formula = formula.replace(str(orig_template_formula_row), str(row))
-                new_cell.value = new_formula
+            if orig_template_formula_row:
+                ref_cell = sheet.cell(row=src_row_index, column=col)
+                if ref_cell.data_type == 'f':
+                    formula = ref_cell.value
+                    # Adjust row references in the formula
+                    new_formula = formula.replace(str(orig_template_formula_row), str(row))
+                    new_cell.value = new_formula
 
 
 def update_row_formulas(sheet, row_index: int, orig_template_row_shift: int):
@@ -108,3 +106,27 @@ def write_to_cell(write_sheet, write_row_num: int, write_col_num: int, value: st
     if value is not None: # 0 value should be written
         new_cell = write_sheet.cell(row=write_row_num, column=write_col_num)
         new_cell.value = value
+
+
+def __create_named_styles(sheet, template_row) -> dict:
+    named_styles = {}
+    max_col = sheet.max_column
+    sheet_name = sheet.title
+    wb = sheet.parent
+
+    for col in range(1, max_col + 1):
+        template_cell = sheet.cell(row=template_row, column=col)
+        style_name = f"template_{sheet_name}_col_{col}"
+
+        named_style = NamedStyle(name=style_name)
+        named_style.font = template_cell.font
+        named_style.fill = template_cell.fill
+        named_style.border = template_cell.border
+        named_style.alignment = template_cell.alignment
+        named_style.number_format = template_cell.number_format
+
+        wb.add_named_style(named_style)
+
+        named_styles[col] = style_name
+
+    return named_styles
