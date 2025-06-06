@@ -1,9 +1,9 @@
 import io
 import os.path
+from copy import copy
 from datetime import date
 
 import pandas as pd
-from openpyxl.styles import NamedStyle
 from pandas import DataFrame
 from openpyxl import Workbook
 
@@ -75,12 +75,17 @@ def copy_row_styles_and_formulas(
         sheet, src_row_index: int, start_row_index: int, end_row_index: int, orig_template_formula_row: int | None = None
 ):
     last_col_index = sheet.max_column
-    named_styles = __create_named_styles(sheet, src_row_index)
+    template_styles = __create_styles(sheet, src_row_index)
     for row in range(start_row_index, end_row_index + 1):
         for col in range(1, last_col_index + 1):
             new_cell = sheet.cell(row=row, column=col)
-            if col in named_styles:
-                new_cell.style = named_styles[col]
+            if col in template_styles:
+                curr_style = template_styles[col]
+                new_cell.font = curr_style['font']
+                new_cell.fill = curr_style['fill']
+                new_cell.border = curr_style['border']
+                new_cell.alignment = curr_style['alignment']
+                new_cell.number_format = curr_style['number_format']
 
             # Copy formula, adjusting row references
             if orig_template_formula_row:
@@ -108,25 +113,18 @@ def write_to_cell(write_sheet, write_row_num: int, write_col_num: int, value: st
         new_cell.value = value
 
 
-def __create_named_styles(sheet, template_row) -> dict:
-    named_styles = {}
+def __create_styles(sheet, template_row) -> dict:
+    template_styles = {}
     max_col = sheet.max_column
-    sheet_name = sheet.title
-    wb = sheet.parent
 
     for col in range(1, max_col + 1):
         template_cell = sheet.cell(row=template_row, column=col)
-        style_name = f"template_{sheet_name}_col_{col}"
+        template_styles[col] = {
+            'font': copy(template_cell.font),
+            'fill': copy(template_cell.fill),
+            'border': copy(template_cell.border),
+            'alignment': copy(template_cell.alignment),
+            'number_format': copy(template_cell.number_format)
+        }
 
-        named_style = NamedStyle(name=style_name)
-        named_style.font = template_cell.font
-        named_style.fill = template_cell.fill
-        named_style.border = template_cell.border
-        named_style.alignment = template_cell.alignment
-        named_style.number_format = template_cell.number_format
-
-        wb.add_named_style(named_style)
-
-        named_styles[col] = style_name
-
-    return named_styles
+    return template_styles
