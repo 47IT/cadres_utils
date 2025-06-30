@@ -19,3 +19,10 @@ def date_to_api_str(input_date: date | pd.Timestamp, custom_date_format: str = N
     elif isinstance(input_date, str):
         return input_date
     return None
+
+
+def get_month_first_last(date_stat):
+    first_day = date_stat.replace(day=1)
+    last_day = date_stat.replace(day=calendar.monthrange(date_stat.year, date_stat.month)[1])
+
+    return first_day, last_day
