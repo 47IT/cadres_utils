@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "utility functions for cadres"
 requires-python = ">=3.13"
 dependencies = [
-    "aiohttp>=3.11.15",
+    "aiohttp>=3.12.13",
     "openpyxl>=3.1.5",
     "pandas>=2.2.3",
     "setuptools>=78.1.0",
