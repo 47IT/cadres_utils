@@ -2,6 +2,7 @@ import calendar
 from datetime import date, datetime
 
 import pandas as pd
+from pandas import DataFrame
 
 
 def get_date_value(date_val) -> date:
@@ -27,3 +28,13 @@ def get_month_first_last(date_stat):
     last_day = date_stat.replace(day=calendar.monthrange(date_stat.year, date_stat.month)[1])
 
     return first_day, last_day
+
+
+def generate_date_stat_dataframe(start_date: date, end_date: date) -> DataFrame:
+    date_range = pd.date_range(start=start_date, end=end_date, freq='D')
+    df = pd.DataFrame({
+        'date_stat': date_range,
+        'day_number_of_year': date_range.dayofyear
+    })
+
+    return df
