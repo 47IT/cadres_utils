@@ -30,7 +30,7 @@ def get_file_list(base_file_path: str, base_file_name: str | None = None) -> lis
 def is_file_for_proc(base_file_path, file_name: str, base_file_name: str) -> bool:
     res = os.path.isfile(os.path.join(base_file_path, file_name))
     if base_file_name:
-        res = res and base_file_name
+        res = res and (base_file_name in file_name)
     # res = res and 'попередні_періоди_служби' in file_name
     res = res and file_name[0] not in ['.', '~']
     res = res and file_name.endswith('.xlsx')
