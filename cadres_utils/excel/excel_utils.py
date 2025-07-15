@@ -7,7 +7,7 @@ import pandas as pd
 from pandas import DataFrame
 from openpyxl import Workbook
 
-from cadres_utils.file_utils import get_random_string
+from cadres_utils.file.utils import get_random_string
 
 
 def save_default_excel_file(df: DataFrame, save_path: str, export_index=False, file_name: str = None) -> str:
