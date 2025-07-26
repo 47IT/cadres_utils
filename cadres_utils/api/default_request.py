@@ -15,16 +15,21 @@ from cadres_utils.api.wapi_invoker import WapiInvoker
 async def process_default_list(
         api: WapiInvoker, object_name: str, filters: dict, columns: list[str], date_fields: list[str] | None = None,
         new_column_names: list[str] | None = None,
+        operation_name: str = 'List', params: dict | None = None,
 ) -> DataFrame:
     start_time = time.perf_counter()
-    req_url = posixpath.join(object_name, 'List')
+    req_url = posixpath.join(object_name, operation_name)
+    request_body = {
+        'Page': -1,
+        'Columns': columns,
+        'Filters': filters,
+    }
+    if params:
+        request_body['Params'] = params
+
     response = await api.post_request(
         req_url,
-        {
-            'Page': -1,
-            'Columns': columns,
-            'Filters': filters,
-        }
+        request_body,
     )
     if response['ResponseCode'] != '000':
         raise ApiException(
