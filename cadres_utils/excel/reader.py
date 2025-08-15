@@ -68,6 +68,7 @@ def read_data_from_excel(source: ExcelDataSource) -> DataFrame:
         sheet_name=source.sheet_name,
         usecols=source.fields,
         skiprows=skip_rows_val,
+        dtype=source.dtype
     )
 
     if source.new_column_names:

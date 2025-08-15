@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List
+from pandas._typing import DtypeArg
 
 
 @dataclass(frozen=True, slots=True)
@@ -12,3 +13,4 @@ class ExcelDataSource:
     not_prepare_str_fields: List[str] = None
     skip_rows: int = None
     error_on_invalid_date: bool = False
+    dtype: DtypeArg | None = None
