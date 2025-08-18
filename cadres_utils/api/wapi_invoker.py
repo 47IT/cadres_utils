@@ -21,7 +21,8 @@ class WapiInvoker:
         return res
 
     def get_wapi_base_url(self):
-        return f'https://{self.__host}/wapi/'
+        protocol = '' if '://' in self.__host else 'https://'
+        return f'{protocol}{self.__host}/wapi/'
 
     def get_cookies(self):
         return {'sid': self.__auth_token}
