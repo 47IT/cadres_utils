@@ -1,6 +1,6 @@
 from enum import Enum
 
-HUNDRED = ['сто', 'двісти', 'триста', 'чотириста', 'п\'ятсот', 'шістсот', 'сімсот', 'вісімсот', 'дев\'ятсот']
+HUNDRED = ['сто', 'двісті', 'триста', 'чотириста', 'п\'ятсот', 'шістсот', 'сімсот', 'вісімсот', 'дев\'ятсот']
 TEN = ['двадцять', 'тридцять', 'сорок', 'п\'ятьдесят', 'шістьдесят', 'сімдесят', 'вісімдесят', 'дев\'яносто']
 SINGLE_MALE = ['нуль', 'один', 'два', 'три', 'чотири', 'п\'ять', 'шість', 'сім', 'вісім', 'дев\'ять']
 SINGLE_FEMALE = ['нуль', 'одна', 'дві', 'три', 'чотири', 'п\'ять', 'шість', 'сім', 'вісім', 'дев\'ять']
@@ -17,7 +17,10 @@ def int_2_text_ukraine(int_val: int, gender: Gender) -> str:
         ten_val = val_2_proc // 10
         unit_val = val_2_proc % 10
 
-        return f'{TEN[ten_val - 2]} {single_list[unit_val]}'
+        num_text = TEN[ten_val - 2]
+        if unit_val > 0:
+            num_text += f' {single_list[unit_val]}'
+        return num_text
 
     if gender == Gender.MALE:
         single_list = SINGLE_MALE
