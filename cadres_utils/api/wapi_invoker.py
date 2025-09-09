@@ -8,7 +8,7 @@ class WapiInvoker:
         self.__auth_token = auth_token
         self.__host = host
 
-    async def post_request(self, object_operation, request_body):
+    async def post_request(self, object_operation, request_body) -> dict:
         url = self.get_wapi_base_url() + object_operation
 
         async with aiohttp.ClientSession(cookies=self.get_cookies()) as session:
