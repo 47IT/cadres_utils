@@ -55,6 +55,8 @@ class JWTWapiInvoker(WapiInvoker):
         headers = super()._get_headers()
         headers['Authorization'] = f'Bearer {self.__get_token()}'
 
+        return headers
+
     def __load_jwk(self):
         with open(self.__jwk_private_key_path, 'r') as f:
             jwk_data = json.load(f)
