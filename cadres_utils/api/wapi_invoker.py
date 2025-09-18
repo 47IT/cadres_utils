@@ -51,7 +51,6 @@ class JWTWapiInvoker(WapiInvoker):
         self.__jwk_data = self.__load_jwk()
         self.__private_key = PyJWK(jwk_data=self.__jwk_data, algorithm='RS256')
 
-
     def _get_headers(self):
         headers = super()._get_headers()
         headers['Authorization'] = f'Bearer {self.__get_token()}'
