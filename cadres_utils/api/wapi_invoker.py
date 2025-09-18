@@ -1,5 +1,6 @@
 import json
 import time
+from typing import Tuple
 
 import aiohttp
 import jwt
@@ -14,6 +15,11 @@ class WapiInvoker:
         self.__host = host
 
     async def post_request(self, object_operation, request_body) -> dict:
+        res, _ = await self.post_request_with_headers(object_operation, request_body)
+        return res
+
+
+    async def post_request_with_headers(self, object_operation, request_body) -> Tuple[dict, dict]:
         url = self.get_wapi_base_url() + object_operation
 
         headers = self._get_headers()
@@ -21,11 +27,13 @@ class WapiInvoker:
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(url, json=request_body, ssl=False) as response:
                 res = await response.json()
+                response_headers = dict(response.headers)
                 if response.status != 200 or res['ResponseCode'] != '000':
                     if res['ResponseCode'] == '401':
                         raise ApiUnauthorizedException(f'Unauthorized. Operation: {object_operation}. Response: {res}')
                     raise ApiException(f'Request error. Operation: {object_operation}. Response: {res}')
-        return res
+        return res, response_headers
+
 
     def get_wapi_base_url(self):
         protocol = '' if '://' in self.__host else 'https://'
