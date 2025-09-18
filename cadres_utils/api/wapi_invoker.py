@@ -8,8 +8,6 @@ class WapiInvoker:
         self.__auth_token = auth_token
         self.__jwt_token = jwt_token
         self.__host = host
-        if not auth_token and not jwt_token:
-            raise ApiException('WapiInvoker init error. No auth token provided')
 
     async def post_request(self, object_operation, request_body) -> dict:
         url = self.get_wapi_base_url() + object_operation
