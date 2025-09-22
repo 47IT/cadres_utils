@@ -77,6 +77,7 @@ class JWTWapiInvoker(WapiInvoker):
             "iat": int(time.time()),
             "iss": self.__jwk_data['iss'],
         }
+        print(payload)
 
         token = jwt.encode(payload, self.__private_key, algorithm="RS256")
 
