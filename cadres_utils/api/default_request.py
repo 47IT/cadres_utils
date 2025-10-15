@@ -74,7 +74,7 @@ async def process_default_list(
                 raise e
 
     end_time = time.perf_counter()
-    logging.debug(f'{object_name} DONE: {(end_time - start_time):.1f}s')
+    logging.debug(f'{object_name}/List ({response['ResponseId']}) DONE: {(end_time - start_time):.1f}s')
     return df
 
 
