@@ -21,7 +21,8 @@ async def process_auth(
             'Request': {
                 object_name: request_data,
             }
-        }
+        },
+        response_headers=True
     )
 
     return response
