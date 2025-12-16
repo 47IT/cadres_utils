@@ -12,6 +12,21 @@ from cadres_utils.api.exception import ApiException
 from cadres_utils.api.wapi_invoker import WapiInvoker
 
 
+async def process_auth(
+    api: WapiInvoker, object_name: str, request_data: list[dict]
+) :
+    response = await api.post_request(
+        object_operation=f'{object_name}',
+        request_body={
+            'Request': {
+                object_name: request_data,
+            }
+        }
+    )
+
+    return response
+
+
 async def process_default_ins_mod(
     api: WapiInvoker, object_name: str, operation_name: str, request_data: list[dict]
 ) -> dict:

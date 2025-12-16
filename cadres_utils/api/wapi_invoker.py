@@ -14,8 +14,10 @@ class WapiInvoker:
         self.__auth_token = auth_token
         self.__host = host
 
-    async def post_request(self, object_operation, request_body) -> dict:
-        res, _ = await self.post_request_with_headers(object_operation, request_body)
+    async def post_request(self, object_operation, request_body, response_headers=False) -> dict:
+        res, headers = await self.post_request_with_headers(object_operation, request_body)
+        if response_headers:
+            return res, headers
         return res
 
 
