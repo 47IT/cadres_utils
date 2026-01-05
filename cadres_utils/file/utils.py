@@ -11,7 +11,6 @@ class FileElement:
     file_name: str
     stream: io.BytesIO
 
-
 def create_all_files_zip(file_list: list[FileElement]) -> io.BytesIO:
     # Create a new BytesIO object to store the ZIP file
     zip_buffer = io.BytesIO()

@@ -46,12 +46,15 @@ async def process_default_ins_mod(
 async def process_default_list(
         api: WapiInvoker, object_name: str, filters: dict, columns: list[str], date_fields: list[str] | None = None,
         new_column_names: list[str] | None = None,
-        operation_name: str = 'List', params: dict | None = None,
+        operation_name: str = 'List', 
+        sorts: list[str] | None = None,
+        params: dict | None = None,
 ) -> DataFrame:
     start_time = time.perf_counter()
     req_url = posixpath.join(object_name, operation_name)
     request_body = {
         'Page': -1,
+        'Sorts': sorts,
         'Columns': columns,
         'Filters': filters,
     }
@@ -93,13 +96,11 @@ async def process_default_list(
     logging.debug(f'{object_name}/List ({response['ResponseId']}) DONE: {(end_time - start_time):.1f}s')
     return df
 
-
 def __process_default_list_from_cache(file_path: str):
     if os.path.exists(file_path):
         return pd.read_parquet(file_path)
     else:
         raise ApiException(f'File not found: {file_path}')
-
 
 def __process_date_error(src_df: DataFrame, field: str, object_name: str):
     logging.error(f'Error in field {field} of {object_name}')
