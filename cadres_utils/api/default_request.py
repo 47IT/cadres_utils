@@ -29,15 +29,19 @@ async def process_auth(
 
 
 async def process_default_ins_mod(
-    api: WapiInvoker, object_name: str, operation_name: str, request_data: list[dict]
+    api: WapiInvoker,
+    object_name: str,
+    operation_name: str,
+    request_data: list[dict],
+    params: dict = None,
 ) -> dict:
+    request_body = { 'Request': { object_name: request_data, } }
+    if params:
+        request_body['Params'] = params
+
     response = await api.post_request(
         object_operation=f'{object_name}/{operation_name}',
-        request_body={
-            'Request': {
-                object_name: request_data,
-            }
-        }
+        request_body=request_body
     )
 
     return response
@@ -46,7 +50,7 @@ async def process_default_ins_mod(
 async def process_default_list(
         api: WapiInvoker, object_name: str, filters: dict, columns: list[str], date_fields: list[str] | None = None,
         new_column_names: list[str] | None = None,
-        operation_name: str = 'List', 
+        operation_name: str = 'List',
         sorts: list[str] | None = None,
         params: dict | None = None,
 ) -> DataFrame:
